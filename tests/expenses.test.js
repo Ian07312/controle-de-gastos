@@ -2,20 +2,20 @@ const request = require('supertest');
 const app = require('../src/app');
 
 jest.mock('../src/db/supabase', () => {
+  const mockData = [{ id: 'fake-id', title: 'Mercado', amount: 150.00, category: 'Alimentação' }];
+
   const mockChain = {
-    select: jest.fn().mockResolvedValue({
-      data: [{ id: 'fake-id', title: 'Mercado', amount: 150.00, category: 'Alimentação' }],
-      error: null
-    }),
+    select: jest.fn().mockReturnThis(),
     insert: jest.fn().mockReturnThis(),
     update: jest.fn().mockReturnThis(),
     delete: jest.fn().mockReturnThis(),
-    order: jest.fn().mockResolvedValue({
-      data: [{ id: 'fake-id', title: 'Mercado', amount: 150.00, category: 'Alimentação' }],
-      error: null
-    }),
+    order: jest.fn().mockResolvedValue({ data: mockData, error: null }),
     eq: jest.fn().mockResolvedValue({ error: null }),
   };
+
+  mockChain.select.mockReturnValue(mockChain);
+  mockChain.insert.mockReturnValue({ select: jest.fn().mockResolvedValue({ data: mockData, error: null }) });
+  mockChain.delete.mockReturnValue({ eq: jest.fn().mockResolvedValue({ error: null }) });
 
   return {
     from: jest.fn(() => mockChain),
@@ -27,6 +27,14 @@ describe('GET /', () => {
     const res = await request(app).get('/');
     expect(res.status).toBe(200);
     expect(res.body.status).toBe('API Controle de Gastos online 🚀');
+  });
+});
+
+describe('GET /expenses', () => {
+  it('deve listar os gastos', async () => {
+    const res = await request(app).get('/expenses');
+    expect(res.status).toBe(200);
+    expect(Array.isArray(res.body)).toBe(true);
   });
 });
 
