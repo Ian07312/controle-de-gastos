@@ -1,3 +1,4 @@
+// Rotas CRUD para controle de gastos
 const express = require('express');
 const router = express.Router();
 const supabase = require('../db/supabase');
@@ -16,10 +17,14 @@ router.get('/', async (req, res) => {
 router.get('/summary', async (req, res) => {
   const { data, error } = await supabase
     .from('expenses')
-    .select('amount');
+    .select('amount, category');
   if (error) return res.status(500).json({ error: error.message });
   const total = data.reduce((sum, expense) => sum + Number(expense.amount), 0);
-  res.json({ total: total.toFixed(2) });
+  const porCategoria = data.reduce((acc, expense) => {
+    acc[expense.category] = (acc[expense.category] || 0) + Number(expense.amount);
+    return acc;
+  }, {});
+  res.json({ total: total.toFixed(2), por_categoria: porCategoria });
 });
 
 // POST /expenses — criar novo gasto
