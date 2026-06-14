@@ -5,7 +5,7 @@ API REST para controle de gastos pessoais, desenvolvida como projeto final do Bo
 ## 👥 Integrantes
 | Nome | Matrícula |
 |------|-----------|
-| Ian Clau | 000001 |
+| Ian Clauhs | 22511625 |
 
 ## 🚀 Tecnologias
 - Node.js + Express
@@ -15,7 +15,7 @@ API REST para controle de gastos pessoais, desenvolvida como projeto final do Bo
 - Render (Deploy)
 
 ## 🔗 Links
-- **API em produção:** https://seu-app.onrender.com
+- - **API em produção:** https://controle-de-gastos-stzt.onrender.com
 - **Repositório:** https://github.com/Ian07312/controle-de-gastos
 
 ## ⚙️ Como rodar localmente
